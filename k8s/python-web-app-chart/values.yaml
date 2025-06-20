@@ -1,0 +1,55 @@
+replicaCount: 1
+image:
+  repository: ghcr.io/davit-devops-grigoryan/python-web-app/myapp
+  pullPolicy: IfNotPresent
+  tag: 1.2.0_7417b86
+imagePullSecrets: []
+nameOverride: ""
+version:
+  a: 1
+  b: 2
+  c: 0
+  commitSha: "7417b86"
+fullnameOverride: ""
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 5000
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+resources: {}
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+volumes: []
+volumeMounts: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
