@@ -68,7 +68,7 @@ jobs:
       - name: Commit and push YAML update
         run: |
           git add k8s/python-web-app-chart/values.yaml
-          git commit -m "Update values.yaml with new version ${{ env.TAG }}_${{ env.COMMIT_SHA }} [skip ci]" || echo "No changes"
+          git commit -m "This is automated commit, from runner, update values.yaml with new version ${{ env.TAG }}_${{ env.COMMIT_SHA }} [skip ci]" || echo "No changes"
           git push
 
 #Work with helm packaging, and pushing it into github package registry
