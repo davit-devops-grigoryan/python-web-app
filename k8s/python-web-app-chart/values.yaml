@@ -2,14 +2,14 @@ replicaCount: 1
 image:
   repository: ghcr.io/davit-devops-grigoryan/python-web-app/myapp
   pullPolicy: IfNotPresent
-  tag: 1.2.1_3bdf3dd
+  tag: 1.2.1_219d3a2
 imagePullSecrets: []
 nameOverride: ""
 version:
   a: 1
   b: 2
   c: 1
-  commitSha: "3bdf3dd"
+  commitSha: "219d3a2"
 fullnameOverride: ""
 serviceAccount:
   create: true
