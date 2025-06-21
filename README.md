@@ -1,5 +1,4 @@
-# 🐍 Python Web App with Docker, Helm & GitHub Actions
-
+# Python Web App with Docker, Helm & GitHub Actions
 
 ---
 
@@ -32,7 +31,6 @@
 ```
 # Python Flask Web App
 
-## Overview
 
 This is a simple Python Flask web application that responds to a `GET` request with a message including the application version and the latest commit SHA.
 
@@ -50,9 +48,6 @@ This is a simple Python Flask web application that responds to a `GET` request w
 ```
 
 # Github Workflow 
-
-## Overview
-
 
 ## 📂 Workflow File: `.github/workflows/ci-cd.yaml`
 
@@ -80,3 +75,57 @@ on:
     branches:
       - main
 
+
+# 🚀 Python Web App CI/CD with Helm & GitHub Actions
+
+This repository contains a Python web application deployed using Kubernetes and Helm, with CI/CD powered by GitHub Actions.
+
+## 🛠 GitHub Actions: Modify Helm Values & Inject App Version
+
+A GitHub Actions job automatically modifies the `values.yaml` file inside the Helm chart before deployment. It updates:
+
+- Docker image name and tag
+- Application version details (`a`, `b`, `c`)
+- Commit SHA
+
+These values are passed into the web application and rendered in the HTTP response.
+
+### 🔧 Workflow Snippet
+
+```yaml
+- name: Modify image name and tag in values.yaml, also pass env variable in python web app, for visualize in http responce
+  run: |
+    yq e '.image.repository = "ghcr.io/${{ github.repository }}/myapp"' -i k8s/python-web-app-chart/values.yaml
+    yq e '.image.tag =  "'"${{ env.TAG }}_${{ env.COMMIT_SHA }}"'"' -i k8s/python-web-app-chart/values.yaml
+    yq e '.version.a = ${{ env.VERSION_A }}' -i k8s/python-web-app-chart/values.yaml
+    yq e '.version.b = ${{ env.VERSION_B }}' -i k8s/python-web-app-chart/values.yaml
+    yq e '.version.c = ${{ env.VERSION_C }}' -i k8s/python-web-app-chart/values.yaml
+    yq e '.version.commitSha = "${{ env.COMMIT_SHA }}"' -i k8s/python-web-app-chart/values.yaml
+
+
+## 📦 CI/CD Pipeline and Runner Setup
+
+This repository is already configured with a GitHub Actions self-hosted runner.
+
+### ✅ Runner Information
+
+If you open the repository **Settings > Actions > Runners**, you'll find a **registered runner** that is ready to execute workflows.
+
+Runner-host located in GCP
+
+You can **test the CI/CD pipeline** by pushing changes to the `main` branch or triggering workflows manually (depending on the workflow configuration).
+
+### 🔐 Commit Guidelines
+
+When committing any changes that interact with workflows or push to the repository from scripts or CI:
+
+- **Always use a GitHub access token**.
+- Make sure your token has the required permissions:
+  - `contents: write`
+  - `packages: write`
+  - `id-token: write`
+  - `attestations: write`
+
+Using a token ensures that your actions are authenticated and workflows execute properly.
+
+---
