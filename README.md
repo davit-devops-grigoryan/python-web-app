@@ -74,7 +74,7 @@ on:
   push:
     branches:
       - main
-
+```
 
 # 🚀 Python Web App CI/CD with Helm & GitHub Actions
 
@@ -102,7 +102,7 @@ These values are passed into the web application and rendered in the HTTP respon
     yq e '.version.c = ${{ env.VERSION_C }}' -i k8s/python-web-app-chart/values.yaml
     yq e '.version.commitSha = "${{ env.COMMIT_SHA }}"' -i k8s/python-web-app-chart/values.yaml
 
-
+```
 ## 📦 CI/CD Pipeline and Runner Setup
 
 This repository is already configured with a GitHub Actions self-hosted runner.
@@ -113,7 +113,7 @@ If you open the repository **Settings > Actions > Runners**, you'll find a **reg
 
 Runner-host located in GCP
 
-You can **test the CI/CD pipeline** by pushing changes to the `main` branch or triggering workflows manually (depending on the workflow configuration).
+You can **test the CI/CD pipeline** by pushing changes to the `main` branch.
 
 ### 🔐 Commit Guidelines
 
@@ -128,4 +128,78 @@ When committing any changes that interact with workflows or push to the reposito
 
 Using a token ensures that your actions are authenticated and workflows execute properly.
 
+
+# Helm Chart: `python-web-app-chart`
+
+This Helm chart deploys a Python-based web application to a Kubernetes cluster.
+
 ---
+
+## 1. How to Create the Helm Chart
+
+To create the chart structure:
+
+```bash
+helm create python-web-app-chart
+
+```
+
+## Add Custom Environment Variables in values.yaml
+```
+env:
+  - name: VERSION_A
+    value: "1"
+  - name: VERSION_B
+    value: "0"
+  - name: VERSION_C
+    value: "2"
+  - name: COMMIT_SHA
+    value: "abc123"
+
+```
+
+## Template configuration
+```
+          env:
+            - name: VERSION_A
+              value: "{{ .Values.version.a }}"
+            - name: VERSION_B
+              value: "{{ .Values.version.b }}"
+            - name: VERSION_C
+              value: "{{ .Values.version.c }}"
+            - name: COMMIT_SHA
+              value: "{{ .Values.version.commitSha }}"
+```
+## Deploy Helm Chart in a Local Kubernetes Cluster
+```bash
+helm install my-python-app ./python-web-app-chart
+
+```
+## Push Helm Chart to GitHub Package Registry
+```bash
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Log in to GHCR via Helm
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Package Helm chart
+        run: |
+          cd k8s
+          helm package python-web-app-chart
+
+      - name: Push Helm chart to GHCR
+        run: |
+          cd k8s
+          CHART_PACKAGE=$(ls *.tgz)
+          helm push $CHART_PACKAGE oci://ghcr.io/${{ github.repository_owner }}
+
+```
+## Install from package regustry
+
+```bash
+helm install {your app name } oci://ghcr.io/davit-devops-grigoryan/python-web-app-chart --version 0.5.0
+```
