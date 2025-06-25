@@ -9,7 +9,9 @@ jobs:
     steps:
       - name: Step 1
         id: first-step
-        run: echo "Hello for first step"   
+        run: echo "Hello for first step"  
+      - name: Checkout code
+        uses: actions/checkout@v3 
       - name: Use custom action
         uses: ./.github/workflows/my_custom_actions/first_custom_action 
       - name: Print Commit sha
