@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   example_job_for_test:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Step 1
         id: first-step
