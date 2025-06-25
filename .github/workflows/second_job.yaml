@@ -10,3 +10,7 @@ jobs:
       - name: Step 1
         id: first-step
         run: echo "Hello for first step"   
+      - name: Use custom action
+        uses: ./.github/workflows/my_custom_actions/first_custom_action 
+      - name: Print Commit sha
+        run: echo "Getting commit sha from custom action and print it --->  $COMMIT_SHA"
