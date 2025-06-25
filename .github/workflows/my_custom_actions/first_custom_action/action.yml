@@ -7,4 +7,4 @@ runs:
       id: custom_action_commit_sha_get
       shell: bash
       run: |
-        "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV  
+        echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV  
