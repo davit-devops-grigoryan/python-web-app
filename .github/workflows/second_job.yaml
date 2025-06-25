@@ -14,5 +14,9 @@ jobs:
         uses: actions/checkout@v3 
       - name: Use custom action
         uses: ./.github/workflows/my_custom_actions/first_custom_action 
+        with:
+          commiter_name: 'true'
       - name: Print Commit sha
         run: echo "Getting commit sha from custom action and print it --->  $COMMIT_SHA"
+      - name: Print comitter name 
+        run: echo "Committer is ---> $COMMITTER_NAME"

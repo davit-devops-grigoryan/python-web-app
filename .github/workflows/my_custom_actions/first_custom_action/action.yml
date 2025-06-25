@@ -1,5 +1,10 @@
 name: "Get Current Commit Sha"
 description: "Get current commit sha and print it"
+inputs:
+  commiter_name:
+    description: "Print commit user name or not"
+    required: false
+    default: 'false'
 runs:
   using: "composite"
   steps:
@@ -8,3 +13,9 @@ runs:
       shell: bash
       run: |
         echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV  
+    - name: Print commiter name 
+      if: inputs.commiter_name == 'true'
+      id: commiter_getter
+      shell: bash
+      run: | 
+        echo "COMMITTER_NAME=$(git log -1 --pretty=format:'%cn')" >> $GITHUB_ENV
