@@ -1,8 +1,9 @@
-name: 'Get Current Commit Sha'
-description: 'Get current commit sha and print it '
+name: "Get Current Commit Sha"
+description: "Get current commit sha and print it"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Get Comit sha
       id: custom_action_commit_sha_get
-      run: "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV  
+      run: |
+        "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV  
